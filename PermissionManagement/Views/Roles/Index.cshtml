@@ -44,7 +44,7 @@
                                 Delete
                             </a>
                         </form>
-                        @if(roleName != "SuperAdmin")
+                        @if(role.Name != "SuperAdmin")
                 {
                     <a style="margin-right:16px" asp-controller="Permission" asp-action="Index" asp-route-roleId="@role.Id" class="dropdown-item">
                         <i class="fas fa-wrench"></i>

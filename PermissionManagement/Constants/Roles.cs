@@ -9,8 +9,7 @@ namespace PermissionManagement.Constants
     {
         SuperAdmin,
         Admin,
-        Basic, 
-        Facilitator,
-        CentreManager
+        Basic 
+        
     }
 }
