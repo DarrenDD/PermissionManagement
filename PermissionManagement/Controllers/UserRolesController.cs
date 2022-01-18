@@ -13,13 +13,13 @@ namespace PermissionManagement.Controllers
     [Authorize(Roles = "SuperAdmin")]
     public class UserRolesController : Controller
     {
-        private readonly SignInManager<IdentityUser> _signinManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public UserRolesController(SignInManager<IdentityUser> signinManager, 
+        public UserRolesController(SignInManager<IdentityUser> signInManager, 
             UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            _signinManager = signinManager;
+            _signInManager = signInManager;
             _userManager = userManager;
             _roleManager = roleManager;
         }
@@ -49,6 +49,17 @@ namespace PermissionManagement.Controllers
                 UserRoles = viewModel
             };
             return View(model);
+        }
+        public async Task<IActionResult> Update(string id,ManageUserRolesViewModel model)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            var roles = await _userManager.GetRolesAsync(user);
+            var result = await _userManager.RemoveFromRolesAsync(user, roles);
+            result = await _userManager.AddToRolesAsync(user, model.UserRoles.Where(x => x.Selected).Select(y => y.RoleName));
+            var currentUser = await _userManager.GetUserAsync(User);
+            await _signInManager.RefreshSignInAsync(currentUser);
+            await Seeds.DefaultUsers.SeedSuperAdminAsync(_userManager, _roleManager);
+            return RedirectToAction("Index", new { UserId = id });
         }
             
     }
