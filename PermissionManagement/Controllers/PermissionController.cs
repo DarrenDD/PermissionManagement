@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace PermissionManagement.Controllers
 {
-    [Authorize(Roles = "superAmin")]
+    [Authorize(Roles = "SuperAdmin")]
     public class PermissionController : Controller
     {
         
